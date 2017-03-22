@@ -34,4 +34,17 @@ public class ResponseBuilderTest {
         Integer actual = response.getStatus();
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void testBody() {
+        String expected = "helloworld";
+        Response response = builder.body("helloworld").build();
+        String actual = response.getBody();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testEmptyBody() {
+        assertNull(builder.build().getBody());
+    }
 }
