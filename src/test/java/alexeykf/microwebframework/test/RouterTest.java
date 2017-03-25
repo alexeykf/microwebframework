@@ -15,19 +15,22 @@ import java.lang.reflect.Method;
 public class RouterTest {
 
     Router router;
+    HttpMethod[] methods;
+    Method handler;
 
     @Before
     public void init() {
         router = new Router();
+        handler = createHandler();
+        methods = new HttpMethod[] {HttpMethod.GET};
+        String path = "/";
+        router.addRoute("/", methods, handler);
     }
 
     @Test
     public void testAddRoot() throws NoSuchMethodException, NotFoundRouteException {
-        Method handler = createHandler();
-        HttpMethod[] methods = new HttpMethod[] {HttpMethod.GET};
-        String path = "/";
         Router spyRouter = spy(router);
-        spyRouter.addRoute(path, methods, handler);
+        spyRouter.addRoute("/", methods, handler);
         verify(spyRouter, times(1)).createRoute("/");
 
         Method actual = spyRouter.getHandler("/", HttpMethod.GET);
