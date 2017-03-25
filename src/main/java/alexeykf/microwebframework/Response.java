@@ -18,6 +18,10 @@ public class Response {
     }
 
     public void addBody(String body) {
+        if (body == null) {
+            return;
+        }
+
         if (this.body == null) {
             this.body = new StringBuffer();
         }

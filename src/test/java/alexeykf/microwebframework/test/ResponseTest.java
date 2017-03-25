@@ -20,4 +20,18 @@ public class ResponseTest {
         int actualStatus = response.getStatus();
         assertEquals(defaultStatus, actualStatus);
     }
+
+    @Test
+    public void testAddBody() {
+        response.addBody("test");
+        String actualBody = response.getBody();
+        assertEquals("test", actualBody);
+    }
+
+    @Test
+    public void testAddNullBody() {
+        response.addBody(null);
+        System.out.print(response.getBody());
+        assertNull(response.getBody());
+    }
 }
