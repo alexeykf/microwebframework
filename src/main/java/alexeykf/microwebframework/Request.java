@@ -5,19 +5,40 @@ import javax.servlet.http.HttpServletRequest;
 public class Request {
 
     private String url;
-    private String method;
+    private HttpMethod method;
 
 
     public Request(String url, String method) {
         this.url = url;
-        this.method = method;
+        setMethod(method);
     }
 
     public String getUrl() {
         return url;
     }
 
-    public String getMethod() {
+    private void setMethod(String strMethod) {
+        switch (strMethod.toUpperCase()) {
+            case "GET":
+                method = HttpMethod.GET;
+                break;
+            case "POST":
+                method = HttpMethod.POST;
+                break;
+            case "PUT":
+                method = HttpMethod.PUT;
+                break;
+            case "DELTE":
+                method = HttpMethod.DELETE;
+                break;
+            default:
+                method = HttpMethod.OTHER;
+                break;
+        }
+
+    }
+
+    public HttpMethod getMethod() {
         return method;
     }
 

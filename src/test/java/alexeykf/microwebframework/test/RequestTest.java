@@ -1,5 +1,6 @@
 package alexeykf.microwebframework.test;
 
+import alexeykf.microwebframework.HttpMethod;
 import alexeykf.microwebframework.Request;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,8 +34,8 @@ public class RequestTest {
 
     @Test
     public void testMethod() {
-        String expectedMethod = "GET";
-        String actualMethod = request.getMethod();
+        HttpMethod expectedMethod = HttpMethod.GET;
+        HttpMethod actualMethod = request.getMethod();
         assertEquals(expectedMethod, actualMethod);
     }
 
