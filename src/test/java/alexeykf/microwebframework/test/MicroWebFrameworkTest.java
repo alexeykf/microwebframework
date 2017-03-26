@@ -61,4 +61,18 @@ public class MicroWebFrameworkTest {
         assertEquals(body, actualBody);
     }
 
+    @Test
+    public void testPostShortcut() {
+        String path = "/testpostshortcut";
+        framework.post(path, (req) -> Response.builder().status(201).build());
+
+        Request request = mock(Request.class);
+        when(request.getMethod()).thenReturn(HttpMethod.POST);
+        when(request.getUrl()).thenReturn(path);
+
+        Response response = framework.handle(request);
+        assertEquals(201, response.getStatus());
+        assertNull(response.getBody());
+    }
+
 }

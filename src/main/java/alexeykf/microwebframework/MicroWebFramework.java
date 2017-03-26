@@ -16,4 +16,8 @@ public class MicroWebFramework {
     public void get(String path, LHandler lHandler) {
         router.addRoute(path, new HttpMethod[] {HttpMethod.GET}, new Handler(lHandler, Utils.getHandleMethod(lHandler)));
     }
+
+    public void post(String path, LHandler lHandler) {
+        router.addRoute(path, new HttpMethod[] {HttpMethod.POST}, new Handler(lHandler, Utils.getHandleMethod(lHandler)));
+    }
 }
