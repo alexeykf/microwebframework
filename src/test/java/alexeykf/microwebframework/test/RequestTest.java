@@ -8,6 +8,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestTest {
 
@@ -45,5 +47,15 @@ public class RequestTest {
         String expectedUrl = "/";
         String actualUrl = request.getUrl();
         assertEquals(expectedUrl, actualUrl);
+    }
+
+    @Test
+    public void testParameter() {
+        Map<String, String[]> parameters = new HashMap() {{
+            put("test", new String[]{"testvalue"});
+        }};
+        request = new Request.RequestBuilder().method("GET").url("/").parameters(parameters).build();
+        assertEquals("testvalue", request.getParameter("test")[0]);
+        assertNull(request.getParameter("sdfadsf"));
     }
 }

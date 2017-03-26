@@ -1,11 +1,13 @@
 package alexeykf.microwebframework;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 public class Request {
 
     private String url;
     private HttpMethod method;
+    private Map<String, String[]> parameters;
 
     private Request() {
     }
@@ -46,10 +48,18 @@ public class Request {
     }
 
     public static Request createRequest(HttpServletRequest servletRequest) {
-        String method = servletRequest.getMethod();
-        String url = servletRequest.getRequestURI();
-        Request request = new Request(url, method);
+        Request request = new RequestBuilder()
+                .method(servletRequest.getMethod())
+                .url(servletRequest.getRequestURI()).build();
         return request;
+    }
+
+    public String[] getParameter(String parameter) {
+        return parameters.get(parameter);
+    }
+
+    public Map<String, String[]> getParameters() {
+        return parameters;
     }
 
     public static class RequestBuilder {
@@ -69,6 +79,11 @@ public class Request {
 
         public RequestBuilder url(String url) {
             request.url = url;
+            return this;
+        }
+
+        public RequestBuilder parameters(Map<String, String[]> parameters) {
+            request.parameters = parameters;
             return this;
         }
 
