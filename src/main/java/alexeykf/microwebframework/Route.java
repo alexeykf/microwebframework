@@ -7,18 +7,18 @@ import java.util.Map;
 public class Route {
 
     private final String route;
-    private final Map<HttpMethod, Method> handlers;
+    private final Map<HttpMethod, Handler> handlers;
 
     public Route(String route) {
         handlers = new HashMap<>();
         this.route = route;
     }
 
-    public void addHandler(HttpMethod httpMethod, Method handler) {
+    public void addHandler(HttpMethod httpMethod, Handler handler) {
         handlers.put(httpMethod, handler);
     }
 
-    public Method getHandler(HttpMethod httpMethod) {
+    public Handler getHandler(HttpMethod httpMethod) {
         return handlers.get(httpMethod);
     }
 

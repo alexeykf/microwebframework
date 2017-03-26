@@ -1,8 +1,12 @@
 package alexeykf.microwebframework.test;
 
 import alexeykf.microwebframework.Handler;
+import alexeykf.microwebframework.HttpMethod;
+import alexeykf.microwebframework.Request;
+import alexeykf.microwebframework.Response;
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Mockito.*;
 
 import static org.junit.Assert.*;
 
@@ -22,7 +26,7 @@ public class HandlerTest {
         intClass = int.class;
 
         testHandlerMethod = getClass().getDeclaredMethod("testHandlerMethod", stringClass, intClass);
-        handler = new Handler(testHandlerMethod);
+        handler = new Handler(this, testHandlerMethod);
     }
 
     @Test
@@ -33,5 +37,18 @@ public class HandlerTest {
 
     public String testHandlerMethod(String a, int b) {
         return "test";
+    }
+
+    public Response testHandlerMethod2(Request req) {
+        return Response.builder().build();
+    }
+
+    @Test
+    public void testHandlerInvoke() throws NoSuchMethodException {
+        Request request = mock(Request.class);
+        handler = new Handler(this, getClass().getMethod("testHandlerMethod2", Request.class));
+        when(request.getMethod()).thenReturn(HttpMethod.GET);
+        when(request.getUrl()).thenReturn("/");
+        handler.invoke(request);
     }
 }

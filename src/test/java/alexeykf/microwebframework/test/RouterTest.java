@@ -1,8 +1,6 @@
 package alexeykf.microwebframework.test;
 
-import alexeykf.microwebframework.HttpMethod;
-import alexeykf.microwebframework.NotFoundRouteException;
-import alexeykf.microwebframework.Router;
+import alexeykf.microwebframework.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,13 +8,14 @@ import static org.junit.Assert.*;
 
 import static org.mockito.Mockito.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class RouterTest {
 
     Router router;
     HttpMethod[] methods;
-    Method handler;
+    Handler handler;
 
     @Before
     public void init() {
@@ -28,19 +27,22 @@ public class RouterTest {
     }
 
     @Test
-    public void testAddRoot() throws NoSuchMethodException, NotFoundRouteException {
+    public void testAddRoot() throws NoSuchMethodException, NotFoundRouteException, InvocationTargetException, IllegalAccessException {
         Router spyRouter = spy(router);
         spyRouter.addRoute("/", methods, handler);
         verify(spyRouter, times(1)).createRoute("/");
 
-        Method actual = spyRouter.getHandler("/", HttpMethod.GET);
-        assertEquals(handler, actual);
+        Handler actual = spyRouter.getHandler("/", HttpMethod.GET);
+        assertEquals(handler.getHandlerMethod(), actual.getHandlerMethod());
+
+        Request mock = mock(Request.class);
+        actual.invoke(mock);
     }
 
-    public Method createHandler() {
+    public Handler createHandler() {
         try {
-            Method handler = this.getClass().getDeclaredMethod("testHandler");
-            return handler;
+            Method handlerMethod = this.getClass().getDeclaredMethod("testHandler", Request.class);
+            return new Handler(this, handlerMethod);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -57,6 +59,7 @@ public class RouterTest {
         router.getHandler("/", HttpMethod.POST);
     }
 
-    private void testHandler() {
+    private Response testHandler(Request req) {
+        return null;
     }
 }

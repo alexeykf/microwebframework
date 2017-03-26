@@ -1,5 +1,6 @@
 package alexeykf.microwebframework.test;
 
+import alexeykf.microwebframework.Handler;
 import alexeykf.microwebframework.HttpMethod;
 import alexeykf.microwebframework.Route;
 import org.junit.Before;
@@ -12,7 +13,7 @@ import static org.junit.Assert.*;
 public class RouteTest {
 
     Route route;
-    Method handler;
+    Handler handler;
 
     @Before
     public void init() {
@@ -20,9 +21,10 @@ public class RouteTest {
         handler = findHandler();
     }
 
-    private Method findHandler() {
+    private Handler findHandler() {
         try {
-            return getClass().getDeclaredMethod("handler", new Class[]{});
+            Method method = getClass().getDeclaredMethod("handler", new Class[]{});
+            return new Handler(this, method);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -46,11 +48,11 @@ public class RouteTest {
     public void testGetHandler() {
         addHandlers();
 
-        Method actualHandler = route.getHandler(HttpMethod.GET);
-        assertEquals(this.handler, actualHandler);
+        Handler actualHandler = route.getHandler(HttpMethod.GET);
+        assertEquals(this.handler.getHandlerMethod(), actualHandler.getHandlerMethod());
 
         actualHandler = route.getHandler(HttpMethod.POST);
-        assertEquals(this.handler, actualHandler);
+        assertEquals(this.handler.getHandlerMethod(), actualHandler.getHandlerMethod());
 
         actualHandler = route.getHandler(HttpMethod.DELETE);
         assertNull(actualHandler);
