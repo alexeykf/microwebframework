@@ -50,7 +50,9 @@ public class Request {
     public static Request createRequest(HttpServletRequest servletRequest) {
         Request request = new RequestBuilder()
                 .method(servletRequest.getMethod())
-                .url(servletRequest.getRequestURI()).build();
+                .url(servletRequest.getRequestURI())
+                .parameters(servletRequest.getParameterMap())
+                .build();
         return request;
     }
 
