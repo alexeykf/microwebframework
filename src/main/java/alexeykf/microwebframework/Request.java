@@ -7,6 +7,9 @@ public class Request {
     private String url;
     private HttpMethod method;
 
+    private Request() {
+    }
+
 
     public Request(String url, String method) {
         this.url = url;
@@ -47,5 +50,30 @@ public class Request {
         String url = servletRequest.getRequestURI();
         Request request = new Request(url, method);
         return request;
+    }
+
+    public static class RequestBuilder {
+
+        private Request request;
+
+
+        public RequestBuilder() {
+            request = new Request();
+
+        }
+
+        public RequestBuilder method(String method) {
+            request.setMethod(method);
+            return this;
+        }
+
+        public RequestBuilder url(String url) {
+            request.url = url;
+            return this;
+        }
+
+        public Request build() {
+            return request;
+        }
     }
 }
