@@ -1,6 +1,8 @@
 package alexeykf.microwebframework.test;
 
 import alexeykf.microwebframework.AnnotationProcessor;
+import alexeykf.microwebframework.Handler;
+import alexeykf.microwebframework.HttpMethod;
 import alexeykf.microwebframework.Response;
 import alexeykf.microwebframework.annotations.Route;
 import org.junit.Before;
@@ -14,6 +16,7 @@ public class AnnotationProcessorTest {
     Method route;
     Method withoutAnnotation;
     Method privateMethod;
+    Method staticMethod;
     AnnotationProcessor processor;
 
     @Before
@@ -21,7 +24,7 @@ public class AnnotationProcessorTest {
         route = getDeclaredMethod("route");
         withoutAnnotation = getDeclaredMethod("withoutAnnotation");
         privateMethod = getDeclaredMethod("privateMethod");
-        String testClass = getClass().getName() + ".TestClass";
+        staticMethod = getDeclaredMethod("staticMethod");
         processor = new AnnotationProcessor(getClass().getDeclaredClasses()[0].getName());
     }
 
@@ -42,8 +45,18 @@ public class AnnotationProcessorTest {
     }
 
     @Test
-    public void testProcess() throws ClassNotFoundException {
+    public void testMethodIsNotStatic() {
+        assertTrue(AnnotationProcessor.methodIsNotStatic(privateMethod));
+        assertFalse(AnnotationProcessor.methodIsNotStatic(staticMethod));
+    }
+
+    @Test
+    public void testProcess() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         processor.process();
+        alexeykf.microwebframework.Route route = processor.getRoutes().get(0);
+        Handler handler = route.getHandler(HttpMethod.GET);
+        assertNotNull(handler);
+        assertEquals(this.route, handler.getHandlerMethod());
     }
 
     public static class TestClass {
@@ -58,6 +71,9 @@ public class AnnotationProcessorTest {
         }
 
         private void privateMethod() {
+        }
+
+        public static void staticMethod(){
         }
     }
 }
