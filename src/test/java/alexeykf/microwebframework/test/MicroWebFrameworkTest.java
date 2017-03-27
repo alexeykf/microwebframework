@@ -80,10 +80,10 @@ public class MicroWebFrameworkTest {
     public void testRegister() throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         framework.register(TestClass.class);
 
-        Response response = framework.handle(createRequestMock("/test", HttpMethod.GET));
+        Response response = framework.handle(createRequestMock("/route/test", HttpMethod.GET));
         assertEquals(200, response.getStatus());
 
-        response = framework.handle(createRequestMock("/test", HttpMethod.POST));
+        response = framework.handle(createRequestMock("/route/test", HttpMethod.POST));
         assertEquals(201, response.getStatus());
     }
 
@@ -94,6 +94,7 @@ public class MicroWebFrameworkTest {
         return request;
     }
 
+    @alexeykf.microwebframework.annotations.Route(value = "/route")
     public static class TestClass {
         @alexeykf.microwebframework.annotations.Route(value = "/test", method = HttpMethod.GET)
         public Response testGet(Request request) {

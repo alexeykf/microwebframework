@@ -14,6 +14,8 @@ public class AnnotationProcessor {
     private Object instance;
     private List<Route> routes;
 
+    private String prefixPath = "";
+
     public AnnotationProcessor(String className) {
         this.className = className;
     }
@@ -25,20 +27,30 @@ public class AnnotationProcessor {
     }
 
     private void findRoutes() {
+        findPrefixPath();
         routes = Arrays.asList(clazz.getDeclaredMethods()).stream()
                 .filter(AnnotationProcessor::methodIsPublic)
                 .filter(AnnotationProcessor::methodIsNotStatic)
                 .filter(AnnotationProcessor::routeAnnotation)
                 .map(m -> {
-                    alexeykf.microwebframework.annotations.Route annotation = m.getAnnotation(alexeykf.microwebframework.annotations.Route.class);
-                    String path = annotation.value();
-                    HttpMethod method = annotation.method();
+                    alexeykf.microwebframework.annotations.Route routeAnnotation = m.getAnnotation(alexeykf.microwebframework.annotations.Route.class);
+                    String path = String.format("%s%s", prefixPath, routeAnnotation.value());
+                    HttpMethod method = routeAnnotation.method();
                     Route route = new Route(path);
                     Handler handler = new Handler(instance, m);
                     route.addHandler(method, handler);
                     return route;
                 }).collect(Collectors.toList());
     }
+
+    private void findPrefixPath() {
+        boolean classHaveRouteAnnotation = clazz.isAnnotationPresent(alexeykf.microwebframework.annotations.Route.class);
+        if (classHaveRouteAnnotation) {
+            alexeykf.microwebframework.annotations.Route routeAnnotation = clazz.getDeclaredAnnotation(alexeykf.microwebframework.annotations.Route.class);
+            prefixPath = routeAnnotation.value();
+        }
+    }
+
 
 
     public static boolean routeAnnotation(Method method) {
