@@ -1,6 +1,5 @@
 package alexeykf.microwebframework;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +16,21 @@ public class Router {
         final Route route = createRoute(path);
         Arrays.asList(methods).forEach(m -> route.addHandler(m, handler));
         routes.put(path, route);
+    }
+
+    public void addRoute(Route route) {
+        String url = route.getRoute();
+        if (routes.containsKey(url)) {
+            Route existingRoute = routes.get(url);
+            mergeRoute(existingRoute, route);
+        } else {
+            routes.put(route.getRoute(), route);
+        }
+    }
+
+    private void mergeRoute(Route existingRoute, Route addingRoute) {
+        addingRoute.methods().stream()
+                .forEach(m -> existingRoute.addHandler(m, addingRoute.getHandler(m)));
     }
 
     public Handler getHandler(String path, HttpMethod httpMethod) throws NotFoundRouteException {

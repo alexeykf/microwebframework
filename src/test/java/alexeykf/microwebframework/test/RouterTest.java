@@ -16,14 +16,18 @@ public class RouterTest {
     Router router;
     HttpMethod[] methods;
     Handler handler;
+    Handler otherHandler;
+
+
+    private final String rootPath = "/";
 
     @Before
     public void init() {
         router = new Router();
-        handler = createHandler();
-        methods = new HttpMethod[] {HttpMethod.GET};
-        String path = "/";
-        router.addRoute("/", methods, handler);
+        handler = createHandler("testHandler");
+        otherHandler = createHandler("testOtherHandler");
+        methods = new HttpMethod[] {HttpMethod.GET, HttpMethod.PUT};
+        router.addRoute(rootPath, methods, handler);
     }
 
     @Test
@@ -39,9 +43,9 @@ public class RouterTest {
         actual.invoke(mock);
     }
 
-    public Handler createHandler() {
+    public Handler createHandler(String methodName) {
         try {
-            Method handlerMethod = this.getClass().getDeclaredMethod("testHandler", Request.class);
+            Method handlerMethod = this.getClass().getDeclaredMethod(methodName, Request.class);
             return new Handler(this, handlerMethod);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -56,10 +60,39 @@ public class RouterTest {
 
     @Test(expected = NotFoundRouteException.class)
     public void testNotFoundMethod() throws NotFoundRouteException {
-        router.getHandler("/", HttpMethod.POST);
+        router.getHandler(rootPath, HttpMethod.POST);
+    }
+
+    @Test
+    public void testMergeRoute() throws NotFoundRouteException {
+        Route addingRoute = new Route(rootPath);
+        addingRoute.addHandler(HttpMethod.PUT, otherHandler);
+
+        router.addRoute(addingRoute);
+        Handler putHandler = router.getHandler(rootPath, HttpMethod.PUT);
+        assertEquals(otherHandler.getHandlerMethod(), putHandler.getHandlerMethod());
+
+        Handler getHandler = router.getHandler(rootPath, HttpMethod.GET);
+        assertEquals(handler.getHandlerMethod(), getHandler.getHandlerMethod());
+    }
+
+    @Test
+    public void testAddingNewRoute() throws NotFoundRouteException {
+        String testPath = "/test";
+        Route addingRoute = new Route(testPath);
+        addingRoute.addHandler(HttpMethod.DELETE, otherHandler);
+
+        router.addRoute(addingRoute);
+
+        Handler deleteHandler = router.getHandler(testPath, HttpMethod.DELETE);
+        assertEquals(otherHandler.getHandlerMethod(), deleteHandler.getHandlerMethod());
     }
 
     private Response testHandler(Request req) {
+        return null;
+    }
+
+    private Response testOtherHandler(Request req) {
         return null;
     }
 }

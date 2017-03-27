@@ -2,6 +2,7 @@ package alexeykf.microwebframework;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Route {
 
@@ -25,4 +26,11 @@ public class Route {
         return handlers.containsKey(httpMethod);
     }
 
+    public String getRoute() {
+        return route;
+    }
+
+    public Set<HttpMethod> methods() {
+        return handlers.keySet();
+    }
 }

@@ -7,17 +7,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
 public class RouteTest {
 
+    String rootPath = "/";
     Route route;
     Handler handler;
 
     @Before
     public void init() {
-        route = new Route("/");
+        route = new Route(rootPath);
         handler = findHandler();
     }
 
@@ -63,6 +66,23 @@ public class RouteTest {
         route.addHandler(HttpMethod.GET, handler);
         route.addHandler(HttpMethod.GET, handler);
         route.addHandler(HttpMethod.POST, handler);
+    }
+
+    @Test
+    public void testGettingMethods() {
+        addHandlers();
+        Set<HttpMethod> expectedSet = new HashSet(){{
+            add(HttpMethod.GET);
+            add(HttpMethod.POST);
+        }};
+        Set<HttpMethod> actualSet = route.methods();
+        assertEquals(expectedSet, actualSet);
+    }
+
+    @Test
+    public void testGettingRoute() {
+        String actualRoute = route.getRoute();
+        assertEquals(rootPath, actualRoute);
     }
 
     public String handler() {
