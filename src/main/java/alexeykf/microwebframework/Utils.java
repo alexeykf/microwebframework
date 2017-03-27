@@ -16,4 +16,22 @@ public final class Utils {
         return null;
     }
 
+    public static String normalizePath(String path) {
+
+        if (path.equals("")) {
+            return "/";
+        }
+
+        if (!path.startsWith("/")) {
+            path = "/"  + path;
+        }
+
+        if (path.endsWith("/") && path.length() > 1) {
+            path = path.substring(0, path.length() - 1);
+        }
+
+        path = path.replaceAll("/{2,}", "/");
+        return path;
+    }
+
 }
