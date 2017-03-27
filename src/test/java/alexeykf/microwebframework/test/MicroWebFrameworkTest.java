@@ -1,6 +1,7 @@
 package alexeykf.microwebframework.test;
 
 import alexeykf.microwebframework.*;
+import alexeykf.microwebframework.annotations.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -73,6 +74,36 @@ public class MicroWebFrameworkTest {
         Response response = framework.handle(request);
         assertEquals(201, response.getStatus());
         assertNull(response.getBody());
+    }
+
+    @Test
+    public void testRegister() throws IllegalAccessException, ClassNotFoundException, InstantiationException {
+        framework.register(TestClass.class);
+
+        Response response = framework.handle(createRequestMock("/test", HttpMethod.GET));
+        assertEquals(200, response.getStatus());
+
+        response = framework.handle(createRequestMock("/test", HttpMethod.POST));
+        assertEquals(201, response.getStatus());
+    }
+
+    private Request createRequestMock(String url, HttpMethod method) {
+        Request request = mock(Request.class);
+        when(request.getUrl()).thenReturn(url);
+        when(request.getMethod()).thenReturn(method);
+        return request;
+    }
+
+    public static class TestClass {
+        @alexeykf.microwebframework.annotations.Route(value = "/test", method = HttpMethod.GET)
+        public Response testGet(Request request) {
+            return Response.builder().status(200).build();
+        }
+
+        @alexeykf.microwebframework.annotations.Route(value = "/test", method = HttpMethod.POST)
+        public Response testPost(Request request) {
+            return Response.builder().status(201).build();
+        }
     }
 
 }

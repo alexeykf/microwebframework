@@ -20,4 +20,10 @@ public class MicroWebFramework {
     public void post(String path, LHandler lHandler) {
         router.addRoute(path, new HttpMethod[] {HttpMethod.POST}, new Handler(lHandler, Utils.getHandleMethod(lHandler)));
     }
+
+    public void register(Class<?> clazz) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+        AnnotationProcessor processor = new AnnotationProcessor(clazz.getName());
+        processor.process();
+        processor.getRoutes().forEach(router::addRoute);
+    }
 }
