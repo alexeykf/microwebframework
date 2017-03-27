@@ -11,7 +11,7 @@ public class Route {
 
     public Route(String route) {
         handlers = new HashMap<>();
-        this.route = route;
+        this.route = Utils.normalizePath(route);
     }
 
     public void addHandler(HttpMethod httpMethod, Handler handler) {

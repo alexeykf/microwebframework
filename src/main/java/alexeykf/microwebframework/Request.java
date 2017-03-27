@@ -74,13 +74,12 @@ public class Request {
 
         }
 
-        public RequestBuilder method(String method) {
-            request.setMethod(method);
+        public RequestBuilder method(String method) { request.setMethod(method);
             return this;
         }
 
         public RequestBuilder url(String url) {
-            request.url = url;
+            request.url = Utils.normalizePath(url);
             return this;
         }
 
