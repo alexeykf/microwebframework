@@ -87,6 +87,18 @@ public class MicroWebFrameworkTest {
         assertEquals(201, response.getStatus());
     }
 
+    @Test
+    public void testRegisterObject() throws IllegalAccessException, ClassNotFoundException, InstantiationException {
+        TestClass testInstance = new TestClass();
+        framework.register(testInstance);
+
+        Response response = framework.handle(createRequestMock("/route/test", HttpMethod.GET));
+        assertEquals(200, response.getStatus());
+
+        response = framework.handle(createRequestMock("/route/test", HttpMethod.POST));
+        assertEquals(201, response.getStatus());
+    }
+
     private Request createRequestMock(String url, HttpMethod method) {
         Request request = mock(Request.class);
         when(request.getUrl()).thenReturn(url);

@@ -26,4 +26,11 @@ public class MicroWebFramework {
         processor.process();
         processor.getRoutes().forEach(router::addRoute);
     }
+
+    public void register(Object object) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+        AnnotationProcessor processor = new AnnotationProcessor(object);
+        processor.process();
+        processor.getRoutes().forEach(router::addRoute);
+
+    }
 }

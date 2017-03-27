@@ -20,9 +20,17 @@ public class AnnotationProcessor {
         this.className = className;
     }
 
+    public AnnotationProcessor(Object object) {
+        this(object.getClass().getName());
+        instance = object;
+
+    }
+
     public void process() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         clazz = Class.forName(className);
-        instance = clazz.newInstance();
+        if (instance == null) {
+            instance = clazz.newInstance();
+        }
         findRoutes();
     }
 
