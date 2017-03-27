@@ -19,13 +19,13 @@ public class RequestTest {
 
     @Before
     public void init() {
-        createHttpServletRequestMock();
+        createHttpServletRequestMock("GET");
         createRequest();
     }
 
-    private void createHttpServletRequestMock() {
+    private void createHttpServletRequestMock(String method) {
         servletRequest = mock(HttpServletRequest.class);
-        when(servletRequest.getMethod()).thenReturn("GET");
+        when(servletRequest.getMethod()).thenReturn(method);
         when(servletRequest.getRequestURI()).thenReturn("/");
     }
 
@@ -57,5 +57,21 @@ public class RequestTest {
         request = new Request.RequestBuilder().method("GET").url("/").parameters(parameters).build();
         assertEquals("testvalue", request.getParameter("test")[0]);
         assertNull(request.getParameter("sdfadsf"));
+    }
+
+    @Test
+    public void testSetMethod() {
+        final Map<String, HttpMethod> methods = new HashMap() {{
+            put("GET", HttpMethod.GET);
+            put("POST", HttpMethod.POST);
+            put("PUT", HttpMethod.PUT);
+            put("DELETE", HttpMethod.DELETE);
+            put("PATCH", HttpMethod.OTHER);
+        }};
+
+        methods.keySet().forEach(k -> {
+            createHttpServletRequestMock(k);
+            assertEquals(methods.get(k), Request.createRequest(servletRequest).getMethod());
+        });
     }
 }

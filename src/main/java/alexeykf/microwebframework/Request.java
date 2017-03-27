@@ -33,7 +33,7 @@ public class Request {
             case "PUT":
                 method = HttpMethod.PUT;
                 break;
-            case "DELTE":
+            case "DELETE":
                 method = HttpMethod.DELETE;
                 break;
             default:
