@@ -26,12 +26,16 @@ public class RequestBuilderTest {
         Map<String, String[]> parameters = new HashMap<>();
         parameters.put("param1", new String[]{"value"});
 
+        Map<String, String> headers = new HashMap<>();
+
         Request request = builder
                 .method("GET")
                 .url("/")
+                .headers(headers)
                 .parameters(parameters).build();
         assertEquals(expectedMethod, request.getMethod());
         assertEquals(expectedUrl, request.getUrl());
         assertEquals(parameters, request.getParameters());
+        assertEquals(headers, request.getHeaders());
     }
 }

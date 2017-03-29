@@ -1,6 +1,7 @@
 package alexeykf.microwebframework;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Request {
@@ -8,6 +9,7 @@ public class Request {
     private String url;
     private HttpMethod method;
     private Map<String, String[]> parameters;
+    private Map<String, String> headers = new HashMap<>();
 
     private Request() {
     }
@@ -47,10 +49,19 @@ public class Request {
         return method;
     }
 
+    public String getHeader(String header) {
+        return headers.get(header);
+    }
+
+    public HashMap<String, String> getHeaders() {
+        return new HashMap<>(headers);
+    }
+
     public static Request createRequest(HttpServletRequest servletRequest) {
         Request request = new RequestBuilder()
                 .method(servletRequest.getMethod())
                 .url(servletRequest.getRequestURI())
+                .headers(Utils.servletHeadersToMap(servletRequest))
                 .parameters(servletRequest.getParameterMap())
                 .build();
         return request;
@@ -85,6 +96,11 @@ public class Request {
 
         public RequestBuilder parameters(Map<String, String[]> parameters) {
             request.parameters = parameters;
+            return this;
+        }
+
+        public RequestBuilder headers(Map<String, String> headers) {
+            request.headers = headers;
             return this;
         }
 

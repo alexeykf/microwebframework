@@ -1,6 +1,10 @@
 package alexeykf.microwebframework;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class Utils {
 
@@ -32,6 +36,17 @@ public final class Utils {
 
         path = path.replaceAll("/{2,}", "/");
         return path;
+    }
+
+    public static Map<String, String> servletHeadersToMap(HttpServletRequest req) {
+        Map<String, String> headers = new HashMap<>();
+        Enumeration<String> headerNames = req.getHeaderNames();
+        while(headerNames.hasMoreElements()) {
+            String header = headerNames.nextElement();
+            String headerValue= req.getHeader(header);
+            headers.put(header, headerValue);
+        }
+        return headers;
     }
 
 }
