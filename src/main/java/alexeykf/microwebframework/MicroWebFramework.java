@@ -14,11 +14,16 @@ public class MicroWebFramework {
     }
 
     public void get(String path, LHandler lHandler) {
-        router.addRoute(path, new HttpMethod[] {HttpMethod.GET}, new Handler(lHandler, Utils.getHandleMethod(lHandler)));
+        addRoute(path, lHandler, HttpMethod.GET);
     }
 
     public void post(String path, LHandler lHandler) {
-        router.addRoute(path, new HttpMethod[] {HttpMethod.POST}, new Handler(lHandler, Utils.getHandleMethod(lHandler)));
+        addRoute(path, lHandler, HttpMethod.POST);
+    }
+
+    private void addRoute(String path, LHandler lHandler, HttpMethod method) {
+        Handler handler = new Handler(lHandler, Utils.getHandleMethod(lHandler));
+        router.addRoute(path, new HttpMethod[]{method}, handler);
     }
 
     public void register(Class<?> clazz) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
