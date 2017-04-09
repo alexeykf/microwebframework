@@ -25,24 +25,7 @@ public class Request {
     }
 
     private void setMethod(String strMethod) {
-        switch (strMethod.toUpperCase()) {
-            case "GET":
-                method = HttpMethod.GET;
-                break;
-            case "POST":
-                method = HttpMethod.POST;
-                break;
-            case "PUT":
-                method = HttpMethod.PUT;
-                break;
-            case "DELETE":
-                method = HttpMethod.DELETE;
-                break;
-            default:
-                method = HttpMethod.OTHER;
-                break;
-        }
-
+        method = HttpMethod.fromString(strMethod.toUpperCase());
     }
 
     public HttpMethod getMethod() {
