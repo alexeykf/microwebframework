@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
 
 public class RequestTest {
@@ -95,5 +96,12 @@ public class RequestTest {
     public void testEmptyHeaders() {
         Request request = new Request.RequestBuilder().url("/").method("GET").build();
         assertNotNull(request.getHeaders());
+    }
+
+    @Test
+    public void testIOExceptionInBR() throws IOException {
+        when(servletRequest.getReader()).thenThrow(IOException.class);
+        Request request = Request.createRequest(servletRequest);
+        assertNull(request.getBody());
     }
 }

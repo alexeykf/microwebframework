@@ -1,6 +1,8 @@
 package alexeykf.microwebframework;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +12,7 @@ public class Request {
     private HttpMethod method;
     private Map<String, String[]> parameters;
     private Map<String, String> headers = new HashMap<>();
+    private String body;
 
     private Request() {
     }
@@ -46,8 +49,18 @@ public class Request {
                 .url(servletRequest.getRequestURI())
                 .headers(Utils.servletHeadersToMap(servletRequest))
                 .parameters(servletRequest.getParameterMap())
+                .body(getReaderFromServletRequest(servletRequest))
                 .build();
         return request;
+    }
+
+    private static BufferedReader getReaderFromServletRequest(HttpServletRequest servletRequest) {
+        try {
+            return servletRequest.getReader();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public String[] getParameter(String parameter) {
@@ -56,6 +69,14 @@ public class Request {
 
     public Map<String, String[]> getParameters() {
         return parameters;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 
     public static class RequestBuilder {
@@ -84,6 +105,15 @@ public class Request {
 
         public RequestBuilder headers(Map<String, String> headers) {
             request.headers = headers;
+            return this;
+        }
+
+        public RequestBuilder body(BufferedReader body) {
+            if (body == null) {
+                request.setBody(null);
+            } else {
+                request.setBody(body.lines().reduce("", String::concat));
+            }
             return this;
         }
 
