@@ -21,6 +21,14 @@ public class MicroWebFramework {
         addRoute(path, lHandler, HttpMethod.POST);
     }
 
+    public void put(String path, LHandler lHandler) {
+        addRoute(path, lHandler, HttpMethod.PUT);
+    }
+
+    public void delete(String path, LHandler lHandler) {
+        addRoute(path, lHandler, HttpMethod.DELETE);
+    }
+
     private void addRoute(String path, LHandler lHandler, HttpMethod method) {
         Handler handler = new Handler(lHandler);
         router.addRoute(path, new HttpMethod[]{method}, handler);
