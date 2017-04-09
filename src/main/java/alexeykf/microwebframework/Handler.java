@@ -15,6 +15,10 @@ public class Handler {
         inspect();
     }
 
+    public Handler(LHandler obj) {
+        this(obj, Utils.getHandleMethod(obj));
+    }
+
     public Method getHandlerMethod() {
         return handlerMethod;
     }

@@ -13,9 +13,9 @@ public class Router {
     }
 
     public void addRoute(String path, HttpMethod[] methods, final Handler handler) {
-        final Route route = createRoute(path);
-        Arrays.asList(methods).forEach(m -> route.addHandler(m, handler));
-        routes.put(path, route);
+        Arrays.asList(methods).stream()
+                .map(m -> Route.createRoute(path, m, handler))
+                .forEach(this::addRoute);
     }
 
     public void addRoute(Route route) {
@@ -40,10 +40,5 @@ public class Router {
         }
         return routes.get(path).getHandler(httpMethod);
    }
-
-    public Route createRoute(String token) {
-        Route route = new Route(token);
-        return route;
-    }
 
 }

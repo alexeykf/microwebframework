@@ -33,4 +33,10 @@ public class Route {
     public Set<HttpMethod> methods() {
         return handlers.keySet();
     }
+
+    public static Route createRoute(String path, HttpMethod method, Handler handler) {
+        Route route = new Route(path);
+        route.addHandler(method, handler);
+        return route;
+    }
 }

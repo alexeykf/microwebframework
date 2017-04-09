@@ -10,6 +10,8 @@ import static org.mockito.Mockito.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RouterTest {
 
@@ -33,8 +35,15 @@ public class RouterTest {
     @Test
     public void testAddRoot() throws NoSuchMethodException, NotFoundRouteException, InvocationTargetException, IllegalAccessException {
         Router spyRouter = spy(router);
-        spyRouter.addRoute("/", methods, handler);
-        verify(spyRouter, times(1)).createRoute("/");
+        List<HttpMethod> methods = new ArrayList() {{
+            add(HttpMethod.GET);
+            add(HttpMethod.POST);
+        }};
+        methods.forEach(m -> {
+            Route route = Route.createRoute("/", m, handler);
+            spyRouter.addRoute(route);
+            verify(spyRouter, times(1)).addRoute(route);
+        });
 
         Handler actual = spyRouter.getHandler("/", HttpMethod.GET);
         assertEquals(handler.getHandlerMethod(), actual.getHandlerMethod());

@@ -22,7 +22,7 @@ public class MicroWebFramework {
     }
 
     private void addRoute(String path, LHandler lHandler, HttpMethod method) {
-        Handler handler = new Handler(lHandler, Utils.getHandleMethod(lHandler));
+        Handler handler = new Handler(lHandler);
         router.addRoute(path, new HttpMethod[]{method}, handler);
     }
 
