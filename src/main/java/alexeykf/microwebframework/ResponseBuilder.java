@@ -3,6 +3,7 @@ package alexeykf.microwebframework;
 public class ResponseBuilder {
 
     private int status = 200;
+    private String body = null;
 
     public ResponseBuilder() {
     }
@@ -12,7 +13,16 @@ public class ResponseBuilder {
         return this;
     }
 
+    public ResponseBuilder body(String body) {
+        this.body = body;
+        return this;
+    }
+
     public Response build() {
-        return new Response(status);
+        Response response = new Response(status);
+        if (body != null) {
+            response.addBody(body);
+        }
+        return response;
     }
 }
