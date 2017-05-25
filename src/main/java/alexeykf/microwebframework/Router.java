@@ -35,7 +35,7 @@ public class Router {
 
     public Handler getHandler(String path, HttpMethod httpMethod) throws NotFoundRouteException {
         boolean pathExists = routes.containsKey(path);
-        if (!pathExists || !routes.get(path).handlerExists(httpMethod)) {
+        if (!pathExists || !routes.get(path).methodSupports(httpMethod)) {
             throw new NotFoundRouteException();
         }
         return routes.get(path).getHandler(httpMethod);

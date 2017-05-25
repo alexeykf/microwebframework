@@ -42,9 +42,9 @@ public class RouteTest {
     @Test
     public void testHandlersIsExist() {
         addHandlers();
-        assertTrue(route.handlerExists(HttpMethod.GET));
-        assertTrue(route.handlerExists(HttpMethod.POST));
-        assertFalse(route.handlerExists(HttpMethod.PUT));
+        assertTrue(route.methodSupports(HttpMethod.GET));
+        assertTrue(route.methodSupports(HttpMethod.POST));
+        assertFalse(route.methodSupports(HttpMethod.PUT));
     }
 
     @Test

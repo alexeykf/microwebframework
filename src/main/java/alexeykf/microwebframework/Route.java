@@ -22,7 +22,7 @@ public class Route {
         return handlers.get(httpMethod);
     }
 
-    public boolean handlerExists(HttpMethod httpMethod) {
+    public boolean methodSupports(HttpMethod httpMethod) {
         return handlers.containsKey(httpMethod);
     }
 
