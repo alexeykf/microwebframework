@@ -17,3 +17,22 @@ public class Example extends MicroWebFramework {
 ```
 
 ### Пример web.xml
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+    <servlet>
+        <servlet-name>mainservlet</servlet-name>
+        <servlet-class>alexeykf.microwebframework.servlet.MainServlet</servlet-class>
+        <init-param>
+            <param-name>MicroWebFrameworkClassName</param-name>
+            <param-value>alexeykf.example.Example</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>mainservlet</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+</web-app>
+```
